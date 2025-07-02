@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>พื้นฐานทางเทคโนโลยีสารสนเทศ</title>
+
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      margin: 0 auto;
+      max-width: 1200px;
+    }
+
+    /* Banner Section (Carousel) */
+    .banner {
+      position: relative;
+      width: 100%;
+      height: 400px; /* กำหนดความสูงของแบนเนอร์ */
+      overflow: hidden; /* ซ่อนส่วนเกินของรูปภาพ */
+    }
+
+    .banner-images-wrapper {
+      display: flex;
+      height: 100%;
+      scroll-snap-type: x mandatory; /* บังคับให้สแนปไปยังรูปภาพแต่ละรูป */
+      overflow-x: scroll; /* ทำให้สามารถเลื่อนได้ในแนวนอน */
+      -webkit-overflow-scrolling: touch; /* เพื่อการเลื่อนที่ราบรื่นบน iOS */
+      scrollbar-width: none; /* ซ่อน scrollbar สำหรับ Firefox */
+    }
+
+    .banner-images-wrapper::-webkit-scrollbar {
+      display: none; /* ซ่อน scrollbar สำหรับ Chrome, Safari, Edge */
+    }
+
+    .banner-image-slide {
+      flex: 0 0 100%; /* แต่ละสไลด์จะกว้างเต็ม 100% ของ wrapper */
+      scroll-snap-align: start; /* กำหนดจุดสแนป */
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Set individual background images for each slide */
+    .banner-image-slide:nth-child(1) {
+        background-image: url('https://cdn.pixabay.com/photo/2020/10/21/18/07/laptop-5673901_1280.jpg');
+    }
+    .banner-image-slide:nth-child(2) {
+        background-image: url('https://cdn.pixabay.com/photo/2014/08/26/21/27/service-428538_1280.jpg');
+    }
+    .banner-image-slide:nth-child(3) {
+        background-image: url('https://cdn.pixabay.com/photo/2015/09/04/23/28/wordpress-923188_1280.jpg');
+    }
+
+    .banner-content {
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.3); /* สร้างพื้นหลังทึบแสงเล็กน้อยให้ข้อความอ่านง่ายขึ้น */
+      border-radius: 8px;
+    }
+
+    .banner h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .banner p {
+      font-size: 1.5rem;
+    }
+
+    /* Carousel Navigation Buttons */
+    .carousel-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 2rem;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      z-index: 10; /* ให้ปุ่มอยู่ด้านบนสุด */
+      border-radius: 5px;
+      text-decoration: none; /* สำหรับลิงก์ */
+    }
+
+    .carousel-nav-btn.prev {
+      left: 10px;
+    }
+
+    .carousel-nav-btn.next {
+      right: 10px;
+    }
+
+    .carousel-nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Navigation Menu */
+    nav {
+      background-color: #333;
+      padding: 10px 0;
+    }
+
+    nav ul {
+      list-style: none;
+      text-align: center;
+    }
+
+    nav ul li {
+      display: inline;
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      padding: 10px 15px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: #24ac4d;
+    }
+
+    /* Section Styles */
+    section {
+      background-color: white;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h2, h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    ul {
+      list-style: disc inside;
+      margin-left: 20px;
+      padding-left: 0;
+    }
+
+    ul li {
+        margin-bottom: 8px;
+    }
+
+    strong {
+        color: #4CAF50;
+    }
+
+    /* Footer Styles */
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    footer p {
+      font-size: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .banner {
+        height: 300px;
+      }
+      .banner h1 {
+        font-size: 2.2rem;
+      }
+      .banner p {
+        font-size: 1.2rem;
+      }
+      nav ul li {
+        margin: 0 8px;
+      }
+      nav ul li a {
+        font-size: 1rem;
+        padding: 8px 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .banner {
+        height: 250px;
+      }
+      .banner h1 {
+        font-size: 1.8rem;
+      }
+      .banner p {
+        font-size: 1rem;
+      }
+      nav ul li {
+        display: block;
+        margin: 5px 0;
+      }
+      nav ul li a {
+        display: block;
+      }
+      section {
+        padding: 15px;
+        margin: 15px 0;
+      }
+      h2 {
+          font-size: 1.5rem;
+      }
+      h3 {
+          font-size: 1.2rem;
+      }
+    }
+
+    /* แกลอรี่แสดงอาจารย์ */
+    .gallery-section {
+      padding: 40px 0;
+      background-color: #fff;
+    }
+
+    .gallery-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 คอลัมน์ */
+      gap: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .professor-card {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .professor-card img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      border-bottom: 2px solid #4CAF50;
+    }
+
+    .professor-card h3 {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+
+    .professor-card p {
+      color: #555;
+      margin: 10px 0;
+    }
+
+    .professor-card a {
+      text-decoration: none;
+      color: #1db887;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: inline-block;
+    }
+
+    .professor-card:hover {
+      transform: translateY(-10px); /* เอฟเฟกต์ยกขึ้นเมื่อ hover */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* เพิ่มเงาเมื่อ hover */
+    }
+
+    @media (max-width: 768px) {
+      .gallery {
+        grid-template-columns: 1fr 1fr; /* 2 คอลัมน์สำหรับหน้าจอเล็ก */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery {
+        grid-template-columns: 1fr; /* 1 คอลัมน์สำหรับมือถือ */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner">
+    <div class="banner-images-wrapper">
+      <div id="slide1" class="banner-image-slide">
+        <div class="banner-content">
+          <h1>ยินดีต้อนรับสู่เว็บไซต์ พื้นฐานทางเทคโนโลยีสารสนเทศ</h1>
+          <p>ศึกษาหลักการคำนวณและการประมวลผลข้อมูล</p>
+        </div>
+      </div>
+      <div id="slide2" class="banner-image-slide">
+        <div class="banner-content">
+          <h1>หลักการประมวลผลข้อมูล</h1>
+          <p>เข้าใจกระบวนการ Input, Process, Output</p>
+        </div>
+      </div>
+      <div id="slide3" class="banner-image-slide">
+        <div class="banner-content">
+          <h1>ส่วนประกอบของระบบคอมพิวเตอร์</h1>
+          <p>เรียนรู้ฮาร์ดแวร์และซอฟต์แวร์</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#slide1" class="carousel-nav-btn prev">&#10094;</a>
+    <a href="#slide3" class="carousel-nav-btn next">&#10095;</a>
+    </div>
+
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="#data-system">ระบบข้อมูล</a></li>
+        <li><a href="#data-processing">ประมวลผลข้อมูล</a></li>
+        <li><a href="#hardware-software">ฮาร์ดแวร์ & ซอฟต์แวร์</a></li>
+        <li><a href="#gallery-section">ทีมอาจารย์ผู้สอน</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section id="data-system">
+    <div class="container">
+      <h2>1. ระบบข้อมูลและระบบสารสนเทศ</h2>
+      <p><strong>ระบบจำนวนข้อมูล (Data System)</strong> คือ การจัดเก็บและจัดการข้อมูลในรูปแบบที่สามารถนำไปใช้ประโยชน์ได้.</p>
+      <p><strong>ระบบสารสนเทศ (Information System)</strong> คือ ระบบที่ใช้ในการจัดการข้อมูลและนำมาประมวลผลเพื่อให้เกิดสารสนเทศที่สามารถใช้ในการตัดสินใจ.</p>
+    </div>
+  </section>
+
+  <section id="data-processing">
+    <div class="container">
+      <h2>2. หลักการคำนวณและการประมวลผลข้อมูล</h2>
+      <p>การคำนวณและประมวลผลข้อมูลเกี่ยวข้องกับการใช้เครื่องมือหรือระบบคอมพิวเตอร์ในการจัดการข้อมูล โดยกระบวนการนี้ประกอบด้วย:</p>
+      <ul>
+        <li><strong>การรับข้อมูล (Input)</strong>: การเก็บข้อมูลจากแหล่งต่างๆ</li>
+        <li><strong>การคำนวณหรือประมวลผลข้อมูล (Process)</strong>: การดำเนินการหรือคำนวณข้อมูลเพื่อแปลงข้อมูลดิบให้เป็นผลลัพธ์ที่มีค่า</li>
+        <li><strong>การแสดงผลข้อมูล (Output)</strong>: การแสดงผลลัพธ์ที่ได้จากการประมวลผล</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="hardware-software">
+    <div class="container">
+      <h2>3. ระบบคอมพิวเตอร์ ฮาร์ดแวร์ ซอฟต์แวร์</h2>
+      <h3>3.1 ฮาร์ดแวร์ (Hardware)</h3>
+      <p>ส่วนประกอบทางกายภาพของคอมพิวเตอร์ที่จับต้องได้และมองเห็นได้:</p>
+      <ul>
+        <li><strong>ซีพียู (CPU)</strong>: ตัวประมวลผลหลักที่ใช้ในการคำนวณและประมวลผลข้อมูล เปรียบเสมือนสมองของคอมพิวเตอร์</li>
+        <li><strong>หน่วยความจำ (Memory - RAM)</strong>: อุปกรณ์ที่ใช้ในการจัดเก็บข้อมูลที่คอมพิวเตอร์กำลังใช้งานชั่วคราว เพื่อการเข้าถึงที่รวดเร็ว</li>
+        <li><strong>ฮาร์ดดิสก์ (Hard Disk/SSD)</strong>: อุปกรณ์เก็บข้อมูลแบบถาวร ใช้สำหรับจัดเก็บระบบปฏิบัติการ โปรแกรม และไฟล์ต่างๆ</li>
+        <li><strong>อุปกรณ์เชื่อมต่อ (Peripheral Devices)</strong>: อุปกรณ์ภายนอกที่เชื่อมต่อกับคอมพิวเตอร์เพื่อเพิ่มความสามารถ เช่น คีย์บอร์ด, เมาส์, จอมอนิเตอร์, เครื่องพิมพ์, สแกนเนอร์</li>
+      </ul>
+
+      <h3>3.2 ซอฟต์แวร์ (Software)</h3>
+      <p>ชุดคำสั่งหรือโปรแกรมที่ใช้ควบคุมการทำงานของฮาร์ดแวร์และประมวลผลข้อมูล:</p>
+      <ul>
+        <li><strong>ระบบปฏิบัติการ (Operating System - OS)</strong>: โปรแกรมพื้นฐานที่จัดการทรัพยากรของคอมพิวเตอร์ทั้งหมด เช่น Windows, macOS, Linux ทำหน้าที่เป็นตัวกลางระหว่างผู้ใช้กับฮาร์ดแวร์</li>
+        <li><strong>โปรแกรมประยุกต์ (Application Software)</strong>: โปรแกรมที่ใช้ในการทำงานเฉพาะด้านตามความต้องการของผู้ใช้ เช่น Microsoft Office (Word, Excel, PowerPoint), Photoshop, เว็บเบราว์เซอร์</li>
+        <li><strong>ซอฟต์แวร์ประมวลผลข้อมูล (Data Processing Software)</strong>: โปรแกรมที่ออกแบบมาเพื่อจัดการ วิเคราะห์ และแสดงผลข้อมูล เช่น โปรแกรมสเปรดชีต (Excel), โปรแกรมฐานข้อมูล (Access), โปรแกรมวิเคราะห์สถิติ (SPSS)</li>
+      </ul>
+    </div>
+  </section>
+<!-- แกลอรี่แนะนำอาจารย์ Section -->
+  <section id="gallery-section">
+    <div class="container">
+      <h2>แกลอรี่ อาจารย์ผู้สอน</h2>
+      <div class="gallery">
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_จิโรจน์.jpg" alt="ผศ.จิโรจน์">
+          <h3>ผศ.จิโรจน์ จริตควร</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_ชัชวาลย์.jpg" alt="ผศ.จิโรจน์">
+          <h3>อาจารย์ชัชวาลย์ วรวิทย์รัตนกุล</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_นนทกร.jpg" alt="ผศ.จิโรจน์">
+          <h3>อาจารย์นนทกร เลิศวชิระไพบูลย์</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_นิมิตร.jpg" alt="ผศ.จิโรจน์">
+          <h3>อาจารย์นิมิตร ทักษวิทยาพงศ์</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_บุญศิริ.jpg" alt="ผศ.จิโรจน์">
+          <h3>อาจารย์บุญศิริ มะสัน</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+        <div class="professor-card">
+          <img src="Picture/Ficker IT SPU_ภูริลาภ.jpg" alt="ผศ.จิโรจน์">
+          <h3>อาจารย์ภูริลาภ จุฑาวัชระพล</h3>
+          <p>อาจารย์คณะเทคโนโลยีสารสนเทศ</p>
+          <a href="#">ติดต่ออาจารย์</a>
+        </div>
+
+      </div>
+    </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 วิชา ICT11167  | สร้างสรรค์โดย.............</p>
+    </div>
+  </footer>
+
+</body>
+</html>
